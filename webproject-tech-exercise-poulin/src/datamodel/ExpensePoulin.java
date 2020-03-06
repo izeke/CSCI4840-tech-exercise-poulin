@@ -21,7 +21,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @DynamicInsert
 @Table(name = "expensepoulin")
-public class ExpensePoulin {
+public class ExpensePoulin implements Finance {
 
 	   @Id
 	   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +69,7 @@ public class ExpensePoulin {
 		this.amount = amount;
 	}
 
-	public String getPurchaseDate() {
+	public String getTransactionDate() {
 		return purchaseDate;
 	}
 
@@ -79,5 +79,9 @@ public class ExpensePoulin {
 
 	public Integer getId() {
 		return id;
+	}
+	
+	public String getInsertDate() {
+		return insertDate;
 	}
 }

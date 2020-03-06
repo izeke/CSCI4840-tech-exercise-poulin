@@ -15,6 +15,7 @@ import org.hibernate.cfg.Configuration;
 
 import datamodel.EmployeePoulin;
 import datamodel.ExpensePoulin;
+import datamodel.Finance;
 import datamodel.IncomePoulin;
 
 /**
@@ -82,6 +83,48 @@ public class UtilDBPoulin {
       }
       return resultList;
    }
+   
+   public static List<Finance> listTransactions(String lowerDate, String upperDate) {
+	      List<Finance> resultList = new ArrayList<Finance>();
+
+	      Session session = getSessionFactory().openSession();
+	      Transaction tx = null;
+
+	      try {
+	         tx = session.beginTransaction();
+	         List<?> expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date BETWEEN :lower AND :upper ORDER BY purchase_date ASC")
+	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
+	         List<?> income = session.createQuery("FROM IncomePoulin WHERE received_date BETWEEN :lower AND :upper ORDER BY received_date ASC")
+	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
+	         Iterator<?> expensesIterator = expenses.iterator();
+	         Iterator<?> incomeIterator = income.iterator();
+	         while (expensesIterator.hasNext() || incomeIterator.hasNext()) {
+	        	 if (expensesIterator.hasNext() && !incomeIterator.hasNext()) {
+	        		 resultList.add((ExpensePoulin)expensesIterator.next());
+	        	 } else if (!expensesIterator.hasNext() && incomeIterator.hasNext()) {
+	        		 resultList.add((IncomePoulin)incomeIterator.next());
+	        	 } else {
+	        		 ExpensePoulin nextExpense = (ExpensePoulin)expensesIterator.next();
+	        		 IncomePoulin nextIncome = (IncomePoulin)incomeIterator.next();
+	        		 if (nextExpense.getInsertDate().compareTo(nextIncome.getInsertDate()) < 0) {
+	        			 resultList.add((ExpensePoulin)expensesIterator.next());
+	        			 resultList.add((IncomePoulin)incomeIterator.next());
+	        		 } else {
+	        			 resultList.add((IncomePoulin)incomeIterator.next());
+	        			 resultList.add((ExpensePoulin)expensesIterator.next());
+	        		 }
+	        	 }
+	         }
+	         tx.commit();
+	      } catch (HibernateException e) {
+	         if (tx != null)
+	            tx.rollback();
+	         e.printStackTrace();
+	      } finally {
+	         session.close();
+	      }
+	      return resultList;
+	   }
 
    public static void createEmployees(String userName, String age, String phone) {
       Session session = getSessionFactory().openSession();
