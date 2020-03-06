@@ -15,6 +15,7 @@ import org.hibernate.cfg.Configuration;
 
 import datamodel.EmployeePoulin;
 import datamodel.ExpensePoulin;
+import datamodel.IncomePoulin;
 
 /**
  * @since JavaSE-1.8
@@ -104,6 +105,23 @@ public class UtilDBPoulin {
 	   try {
 		   tx = session.beginTransaction();
 		   session.save(new ExpensePoulin(name, amount, purchaseDate));
+		   tx.commit();
+	   } catch (HibernateException e) {
+		   if (tx != null) {
+			   tx.rollback();
+		   }
+		   e.printStackTrace();
+	   } finally {
+		   session.close();
+	   }
+   }
+   
+   public static void createIncome(String name, String amount, String receivedDate) {
+	   Session session = getSessionFactory().openSession();
+	   Transaction tx = null;
+	   try {
+		   tx = session.beginTransaction();
+		   session.save(new IncomePoulin(name, amount, receivedDate));
 		   tx.commit();
 	   } catch (HibernateException e) {
 		   if (tx != null) {

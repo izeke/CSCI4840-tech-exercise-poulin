@@ -1,12 +1,12 @@
 package datamodel;
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * @since J2SE-1.8
@@ -19,6 +19,7 @@ import javax.persistence.Table;
   PRIMARY KEY (id));
  */
 @Entity
+@DynamicInsert
 @Table(name = "incomepoulin")
 public class IncomePoulin {
 
@@ -31,19 +32,22 @@ public class IncomePoulin {
 	   private String name;
 
 	   @Column(name = "amount")
-	   private BigDecimal amount;
+	   private String amount;
 	   
 	   @Column(name = "received_date")
 	   private String receivedDate;
+	   
+	   @Column(name = "insertDate", columnDefinition = "datetime not null default current_timestamp")
+	   private String insertDate;
 
-	   public IncomePoulin(Integer id, String name, BigDecimal amount, String receivedDate) {
+	   public IncomePoulin(Integer id, String name, String amount, String receivedDate) {
 		   this.id = id;
 		   this.name = name;
 		   this.amount = amount;
 		   this.receivedDate = receivedDate;
 	   }
 	   
-	   public IncomePoulin(String name, BigDecimal amount, String receivedDate) {
+	   public IncomePoulin(String name, String amount, String receivedDate) {
 		   this.name = name;
 		   this.amount = amount;
 		   this.receivedDate = receivedDate;
@@ -57,11 +61,11 @@ public class IncomePoulin {
 		this.name = name;
 	}
 
-	public BigDecimal getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 

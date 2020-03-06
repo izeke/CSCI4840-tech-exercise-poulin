@@ -13,5 +13,6 @@
 		<property name="show_sql">false</property>
 		<mapping class="datamodel.EmployeePoulin" />
 		<mapping class="datamodel.ExpensePoulin" />
+		<mapping class="datamodel.IncomePoulin" />
 	</session-factory>
 </hibernate-configuration>

@@ -1,12 +1,12 @@
 package datamodel;
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 /**
  * @since J2SE-1.8
@@ -19,6 +19,7 @@ import javax.persistence.Table;
   PRIMARY KEY (id));
  */
 @Entity
+@DynamicInsert
 @Table(name = "expensepoulin")
 public class ExpensePoulin {
 
@@ -36,7 +37,7 @@ public class ExpensePoulin {
 	   @Column(name = "purchase_date")
 	   private String purchaseDate;
 	   
-	   @Column(name = "insertDate", columnDefinition = "datetime default current_timestamp")
+	   @Column(name = "insertDate", columnDefinition = "datetime not null default current_timestamp")
 	   private String insertDate;
 
 	   public ExpensePoulin(Integer id, String name, String amount, String purchaseDate) {
