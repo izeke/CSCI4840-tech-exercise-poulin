@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import util.Info;
 import util.UtilDBPoulin;
 
-@WebServlet("/SimpleInsertHB")
-public class SimpleInsertHB extends HttpServlet implements Info {
+@WebServlet("/InsertExpenseHB")
+public class InsertExpenseHB extends HttpServlet implements Info {
    private static final long serialVersionUID = 1L;
 
-   public SimpleInsertHB() {
+   public InsertExpenseHB() {
       super();
    }
 
