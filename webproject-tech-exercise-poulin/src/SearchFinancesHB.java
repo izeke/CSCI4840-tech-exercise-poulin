@@ -47,11 +47,11 @@ public class SearchFinancesHB extends HttpServlet implements Info {
    void display(List<Finance> listTransactions, PrintWriter out) {
       for (Finance transaction : listTransactions) {
     	  if (transaction instanceof ExpensePoulin) {
-    		  System.out.println("[DBG] " + transaction.getId() + ", " //
-    				  + transaction.getName() + ", " //
-    				  + "Expense, " 
-    				  + "-" + transaction.getAmount() + ", "
-    				  + transaction.getTransactionDate());
+//    		  System.out.println("[DBG] " + transaction.getId() + ", " //
+//    				  + transaction.getName() + ", " //
+//    				  + "Expense, " 
+//    				  + "-" + transaction.getAmount() + ", "
+//    				  + transaction.getTransactionDate());
     		  
     		  out.println("<li>" + transaction.getId() + ", " //
     				  + transaction.getName() + ", " //
@@ -59,11 +59,11 @@ public class SearchFinancesHB extends HttpServlet implements Info {
     				  + "-" + transaction.getAmount() + ", "
     				  + transaction.getTransactionDate() + "</li>");
     	  } else if (transaction instanceof IncomePoulin) {
-    		  System.out.println("[DBG] " + transaction.getId() + ", " //
-    				  + transaction.getName() + ", " //
-    				  + "Income, " 
-    				  + "+" + transaction.getAmount() + ", "
-    				  + transaction.getTransactionDate());
+//    		  System.out.println("[DBG] " + transaction.getId() + ", " //
+//    				  + transaction.getName() + ", " //
+//    				  + "Income, " 
+//    				  + "+" + transaction.getAmount() + ", "
+//    				  + transaction.getTransactionDate());
     		  
     		  out.println("<li>" + transaction.getId() + ", " //
     				  + transaction.getName() + ", " //

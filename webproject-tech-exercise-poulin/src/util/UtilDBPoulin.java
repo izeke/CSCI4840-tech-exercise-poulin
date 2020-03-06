@@ -5,6 +5,7 @@ package util;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -96,8 +97,8 @@ public class UtilDBPoulin {
 	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
 	         List<?> income = session.createQuery("FROM IncomePoulin WHERE received_date BETWEEN :lower AND :upper ORDER BY received_date ASC")
 	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
-	         Iterator<?> expensesIterator = expenses.iterator();
-	         Iterator<?> incomeIterator = income.iterator();
+	         ListIterator<?> expensesIterator = expenses.listIterator();
+	         ListIterator<?> incomeIterator = income.listIterator();
 	         while (expensesIterator.hasNext() || incomeIterator.hasNext()) {
 	        	 if (expensesIterator.hasNext() && !incomeIterator.hasNext()) {
 	        		 resultList.add((ExpensePoulin)expensesIterator.next());
@@ -106,13 +107,17 @@ public class UtilDBPoulin {
 	        	 } else {
 	        		 ExpensePoulin nextExpense = (ExpensePoulin)expensesIterator.next();
 	        		 IncomePoulin nextIncome = (IncomePoulin)incomeIterator.next();
-	        		 if (nextExpense.getInsertDate().compareTo(nextIncome.getInsertDate()) < 0) {
-	        			 resultList.add((ExpensePoulin)expensesIterator.next());
-	        			 resultList.add((IncomePoulin)incomeIterator.next());
+	        		 if (nextExpense.getTransactionDate().compareTo(nextIncome.getTransactionDate()) < 0) {
+	        			 resultList.add(nextExpense);
+	        			 incomeIterator.previous();
 	        		 } else {
-	        			 resultList.add((IncomePoulin)incomeIterator.next());
-	        			 resultList.add((ExpensePoulin)expensesIterator.next());
+	        			 resultList.add(nextIncome);
+	        			 expensesIterator.previous();
 	        		 }
+	        		 System.out.println(nextExpense.getTransactionDate());
+	        		 System.out.println(nextIncome.getTransactionDate());
+	        		 System.out.println(nextExpense.getTransactionDate().compareTo(nextIncome.getTransactionDate()));
+	        		 
 	        	 }
 	         }
 	         tx.commit();

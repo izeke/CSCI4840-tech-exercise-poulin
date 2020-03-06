@@ -40,6 +40,10 @@ public class IncomePoulin implements Finance{
 	   @Column(name = "insertDate", columnDefinition = "datetime not null default current_timestamp")
 	   private String insertDate;
 
+	   public IncomePoulin() {
+		   
+	   }
+	   
 	   public IncomePoulin(Integer id, String name, String amount, String receivedDate) {
 		   this.id = id;
 		   this.name = name;
