@@ -3,7 +3,6 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -14,7 +13,6 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import datamodel.EmployeePoulin;
 import datamodel.ExpensePoulin;
 import datamodel.Finance;
 import datamodel.IncomePoulin;
@@ -34,56 +32,6 @@ public class UtilDBPoulin {
       sessionFactory = configuration.buildSessionFactory(builder.build());
       return sessionFactory;
    }
-
-   public static List<EmployeePoulin> listEmployees() {
-      List<EmployeePoulin> resultList = new ArrayList<EmployeePoulin>();
-
-      Session session = getSessionFactory().openSession();
-      Transaction tx = null;
-
-      try {
-         tx = session.beginTransaction();
-         List<?> employees = session.createQuery("FROM EmployeePoulin").list();
-         for (Iterator<?> iterator = employees.iterator(); iterator.hasNext();) {
-            EmployeePoulin employee = (EmployeePoulin) iterator.next();
-            resultList.add(employee);
-         }
-         tx.commit();
-      } catch (HibernateException e) {
-         if (tx != null)
-            tx.rollback();
-         e.printStackTrace();
-      } finally {
-         session.close();
-      }
-      return resultList;
-   }
-
-   public static List<EmployeePoulin> listEmployees(String keyword) {
-      List<EmployeePoulin> resultList = new ArrayList<EmployeePoulin>();
-
-      Session session = getSessionFactory().openSession();
-      Transaction tx = null;
-
-      try {
-         tx = session.beginTransaction();
-         List<?> employees = session.createQuery("FROM EmployeePoulin").list();
-         for (Iterator<?> iterator = employees.iterator(); iterator.hasNext();) {
-            EmployeePoulin employee = (EmployeePoulin) iterator.next();
-            if (employee.getName().startsWith(keyword)) {
-               resultList.add(employee);
-            }
-         }
-         tx.commit();
-      } catch (HibernateException e) {
-         if (tx != null)
-            tx.rollback();
-         e.printStackTrace();
-      } finally {
-         session.close();
-      }
-      return resultList;
-   }
    
    public static List<Finance> listTransactions(String lowerDate, String upperDate) {
 	      List<Finance> resultList = new ArrayList<Finance>();
@@ -96,8 +44,8 @@ public class UtilDBPoulin {
 	         List<?> expenses = null;
 	         List<?> income = null;
 	         if (lowerDate.equals("") && upperDate.equals("")) {
-	        	 expenses = session.createQuery("FROM ExpensePoulin").list();
-	        	 income = session.createQuery("FROM IncomePoulin").list();
+	        	 expenses = session.createQuery("FROM ExpensePoulin ORDER BY purchase_date ASC").list();
+	        	 income = session.createQuery("FROM IncomePoulin ORDER BY received_date ASC").list();
 	         } else if (lowerDate.equals("")) {
 	        	 expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date < :upper ORDER BY purchase_date ASC")
 	        			 .setParameter("upper", upperDate).list();
@@ -147,22 +95,6 @@ public class UtilDBPoulin {
 	      }
 	      return resultList;
 	   }
-
-   public static void createEmployees(String userName, String age, String phone) {
-      Session session = getSessionFactory().openSession();
-      Transaction tx = null;
-      try {
-         tx = session.beginTransaction();
-         session.save(new EmployeePoulin(userName, Integer.valueOf(age), phone));
-         tx.commit();
-      } catch (HibernateException e) {
-         if (tx != null)
-            tx.rollback();
-         e.printStackTrace();
-      } finally {
-         session.close();
-      }
-   }
    
    public static void createExpense(String name, String amount, String purchaseDate) {
 	   Session session = getSessionFactory().openSession();
