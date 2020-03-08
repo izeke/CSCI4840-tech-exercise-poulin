@@ -38,7 +38,9 @@ public class InsertIncomeHB extends HttpServlet implements Info {
       out.println("<li> Income Amount: " + amount + "</li>");
       out.println("<li> Received Date: " + receivedDate + "</li>");
       out.println("</ul>");
-      out.println("<a href=/" + projectName + "/" + searchWebName + ">Search Data</a> <br>");
+      out.println("<a href=/" + projectName + "/" + searchWebName + ">Search Finances</a> <br>");
+      out.println("<a href=/" + projectName + "/" + insertExpenseWebName + ">Insert Expense</a> <br>");
+      out.println("<a href=/" + projectName + "/" + insertIncomeWebName + ">Insert Income</a> <br>");
       out.println("</body></html>");
    }
 

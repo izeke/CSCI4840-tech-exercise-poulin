@@ -32,20 +32,22 @@ footer {
 
 <body>
 <header>
-<h1> Search Data (Hibernate) </h1>
+<h1> Search Finances</h1>
 </header>
 
 <nav>
-<a href="/webproject-tech-exercise-poulin/InsertExpenseHB.html">Insert Data</a> <br>
+<a href="/webproject-tech-exercise-poulin/InsertExpenseHB.html">Insert Expense</a> <br>
+<a href="/webproject-tech-exercise-poulin/InsertIncomeHB.html">Insert Income</a> <br>
 </nav>
 
 <section>
-	<h1>User Input</h1>
+	<h1>Finance Search</h1>
 	
 	<form action="SearchFinancesHB" method="POST">
 	
-		Lower Date: <input type="text" name="lowerDate"> <br />
-		Upper Date: <input type="text" name="upperDate"> <br />
+		Start Date: <input type="text" name="lowerDate"> <br />
+		End Date: <input type="text" name="upperDate"> <br />
+		 (Enter dates in the format YYYY-MM-DD) <br />
 		
 		<input type="submit" value="Search" />
 	</form>

@@ -35,44 +35,31 @@ public class SearchFinancesHB extends HttpServlet implements Info {
             "<head><title>" + title + "</title></head>\n" + //
             "<body bgcolor=\"#f0f0f0\">\n" + //
             "<h1 align=\"center\">" + title + "</h1>\n");
-      out.println("<ul>");
 
       List<Finance> listTransactions = UtilDBPoulin.listTransactions(lowerDate, upperDate);
       display(listTransactions, out);
-      out.println("</ul>");
-      out.println("<a href=/" + projectName + "/" + searchWebName + ">Search Data</a> <br>");
+      out.println("<a href=/" + projectName + "/" + searchWebName + ">Search Finances</a> <br>");
+      out.println("<a href=/" + projectName + "/" + insertExpenseWebName + ">Insert Expense</a> <br>");
+      out.println("<a href=/" + projectName + "/" + insertIncomeWebName + ">Insert Income</a> <br>");
       out.println("</body></html>");
    }
 
    void display(List<Finance> listTransactions, PrintWriter out) {
+	   out.println("<table><tr><th>Name</th><th>Type</th><th>Amount</th><th>Date</th></tr>");
       for (Finance transaction : listTransactions) {
     	  if (transaction instanceof ExpensePoulin) {
-//    		  System.out.println("[DBG] " + transaction.getId() + ", " //
-//    				  + transaction.getName() + ", " //
-//    				  + "Expense, " 
-//    				  + "-" + transaction.getAmount() + ", "
-//    				  + transaction.getTransactionDate());
-    		  
-    		  out.println("<li>" + transaction.getId() + ", " //
-    				  + transaction.getName() + ", " //
-    				  + "Expense, " 
-    				  + "-" + transaction.getAmount() + ", "
-    				  + transaction.getTransactionDate() + "</li>");
+    		  out.println("<tr><td>" + transaction.getName() + "</td><td>" //
+    				  + "Expense</td><td>" 
+    				  + "-" + transaction.getAmount() + "</td><td>"
+    				  + transaction.getTransactionDate() + "</td></tr>");
     	  } else if (transaction instanceof IncomePoulin) {
-//    		  System.out.println("[DBG] " + transaction.getId() + ", " //
-//    				  + transaction.getName() + ", " //
-//    				  + "Income, " 
-//    				  + "+" + transaction.getAmount() + ", "
-//    				  + transaction.getTransactionDate());
-    		  
-    		  out.println("<li>" + transaction.getId() + ", " //
-    				  + transaction.getName() + ", " //
-    				  + "Income, " 
-    				  + "+" + transaction.getAmount() + ", "
-    				  + transaction.getTransactionDate() + "</li>");
-    		  
+    		  out.println("<tr><td>" + transaction.getName() + "</td><td>" //
+    				  + "Income</td><td>" 
+    				  + "+" + transaction.getAmount() + "</td><td>"
+    				  + transaction.getTransactionDate() + "</td></tr>");
     	  }
       }
+      out.println("</table>");
    }
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
