@@ -93,10 +93,27 @@ public class UtilDBPoulin {
 
 	      try {
 	         tx = session.beginTransaction();
-	         List<?> expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date BETWEEN :lower AND :upper ORDER BY purchase_date ASC")
-	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
-	         List<?> income = session.createQuery("FROM IncomePoulin WHERE received_date BETWEEN :lower AND :upper ORDER BY received_date ASC")
-	        		 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
+	         List<?> expenses = null;
+	         List<?> income = null;
+	         if (lowerDate.equals("") && upperDate.equals("")) {
+	        	 expenses = session.createQuery("FROM ExpensePoulin").list();
+	        	 income = session.createQuery("FROM IncomePoulin").list();
+	         } else if (lowerDate.equals("")) {
+	        	 expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date < :upper ORDER BY purchase_date ASC")
+	        			 .setParameter("upper", upperDate).list();
+	        	 income = session.createQuery("FROM IncomePoulin WHERE received_date < :upper ORDER BY received_date ASC")
+	        			 .setParameter("upper", upperDate).list();
+	         } else if (upperDate.equals("")) {
+	        	 expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date > :lower ORDER BY purchase_date ASC")
+	        			 .setParameter("lower", lowerDate).list();
+	        	 income = session.createQuery("FROM IncomePoulin WHERE received_date > :lower ORDER BY received_date ASC")
+	        			 .setParameter("lower", lowerDate).list();
+	         } else {
+	        	 expenses = session.createQuery("FROM ExpensePoulin WHERE purchase_date BETWEEN :lower AND :upper ORDER BY purchase_date ASC")
+	        			 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
+	        	 income = session.createQuery("FROM IncomePoulin WHERE received_date BETWEEN :lower AND :upper ORDER BY received_date ASC")
+	        			 .setParameter("lower", lowerDate).setParameter("upper", upperDate).list();
+	         }
 	         ListIterator<?> expensesIterator = expenses.listIterator();
 	         ListIterator<?> incomeIterator = income.listIterator();
 	         while (expensesIterator.hasNext() || incomeIterator.hasNext()) {
